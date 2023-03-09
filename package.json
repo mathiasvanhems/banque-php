@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@popperjs/core": "^2.11.6",
+    "@symfony/webpack-encore": "^4.2.0",
+    "bootstrap": "^5.2.3",
+    "jquery": "^3.6.4"
+  }
+}
