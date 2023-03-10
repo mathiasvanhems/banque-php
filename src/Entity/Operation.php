@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OperationRepository::class)]
 class Operation
@@ -17,16 +18,20 @@ class Operation
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Assert\NotBlank]
+    #[Assert\PositiveOrZero(message: 'Cette valeur doit être toujours positive.')]
     private ?string $montant = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $detail = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $dateOperation = null;
 
     #[ORM\ManyToOne(inversedBy: 'operations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank]
     private ?TypeOperation $type = null;
 
     public function __construct()

@@ -6,6 +6,8 @@ use App\Entity\TypeOperation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class TypeOperationType extends AbstractType
 {
@@ -13,7 +15,14 @@ class TypeOperationType extends AbstractType
     {
         $builder
             ->add('libelle')
-            ->add('recurrence')
+            ->add('recurrence', ChoiceType::class, [
+                'choices'  => [
+                    'NA' => 'NA',
+                    'Hebdomadaire' => 'Hebdomadaire',
+                    'Mensuel' => 'Mensuel',
+                ],
+            ])
+            ->add('save', SubmitType::class)
         ;
     }
 

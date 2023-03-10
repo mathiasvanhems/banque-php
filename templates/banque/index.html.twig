@@ -15,6 +15,23 @@
     <ul>
         <li>Your controller at <code><a href="{{ 'C:/wamp64/www/banque/src/Controller/BanqueController.php'|file_link(0) }}">src/Controller/BanqueController.php</a></code></li>
         <li>Your template at <code><a href="{{ 'C:/wamp64/www/banque/templates/banque/index.html.twig'|file_link(0) }}">templates/banque/index.html.twig</a></code></li>
+        <div {{ stimulus_controller('say-hello') }}>
+        <input type="text" {{ stimulus_target('say-hello', 'name') }}>
+
+            <button {{ stimulus_action('say-hello', 'greet') }}>
+                Greet
+            </button>
+
+        <div {{ stimulus_target('say-hello', 'output') }}></div></div>
+
     </ul>
+     {{ render_chart(chart) }}
+
+    {# You can pass HTML attributes as a second argument to add them on the <canvas> tag #}
+    {# {{ render_chart(chart, {'class': 'my-chart'}) }}#}
+
+
+
 </div>
+
 {% endblock %}
