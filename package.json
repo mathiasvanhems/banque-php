@@ -1,0 +1,24 @@
+{
+  "devDependencies": {
+    "@popperjs/core": "^2.11.6",
+    "@symfony/ux-chartjs": "file:vendor/symfony/ux-chartjs/assets",
+    "@symfony/webpack-encore": "^4.2.0",
+    "bootstrap": "^5.2.3",
+    "chart.js": "^3.4.1",
+    "jquery": "^3.6.4",
+    "webpack-notifier": "^1.15.0"
+  },
+  "scripts": {
+    "dev-server": "encore dev-server",
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production --progress"
+  },
+  "dependencies": {
+    "@hotwired/stimulus": "^3.2.1",
+    "@symfony/stimulus-bridge": "^3.2.1",
+    "bootstrap-datepicker": "^1.9.0",
+    "core-js": "^3.29.0",
+    "js-datepicker": "^5.18.2"
+  }
+}
