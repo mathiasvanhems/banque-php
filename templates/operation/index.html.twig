@@ -27,7 +27,7 @@
             {% for operation in operations %}
                 <tr>
                     <td>{{ operation.montant}}{% if operation.sortie == true %} 🟥 {% else %} 🟩 {% endif %}</td>
-                    <td>{{operation.dateOperation|date("m/d/Y")}}</td>
+                    <td>{{operation.dateOperation|date("d/m/Y")}}</td>
                     <td>{{ operation.detail }}</td>
                     <td>{{ operation.libelle }}</td>
                     <td>{{ operation.recurrence }}</td>

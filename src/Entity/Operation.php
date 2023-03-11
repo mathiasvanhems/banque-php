@@ -34,10 +34,11 @@ class Operation
     #[Assert\NotBlank]
     private ?TypeOperation $type = null;
 
-    public function __construct()
+    /*public function __construct()
     {
         $this->typeOperation = new ArrayCollection();
-    }
+    }*/
+
 
     public function getId(): ?int
     {
