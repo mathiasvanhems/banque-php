@@ -15,16 +15,23 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class OperationController extends AbstractController
 {
     private $doctrine;
+    private $em;
+    private $emRepository;
     public function __construct(ManagerRegistry $doctrine)
     {
         $this->doctrine=$doctrine;
+        $this->em = $this->doctrine->getManager();
+        $this->emRepository=$this->em->getRepository(Operation::class);
     }
 
     #[Route('/operation', name: 'app_operation')]
     public function index(): Response
     {
+
+        $operations= $this->emRepository->findAllWithType();
         return $this->render('operation/index.html.twig', [
-            'page_name' => 'OperationController',
+            'page_name' => 'Operation',
+            'operations'=> $operations,
         ]);
     }
 
@@ -36,8 +43,7 @@ class OperationController extends AbstractController
         ValidatorInterface $validator
     ): Response
     {
-        $operationRepository=$doctrine->getManager()->getRepository(Operation::class);
-        $operation=$operationRepository->find($id);
+        $operation=$this->emRepository->find($id);
         if ($id == 0) {
             $operation = new Operation();
         }
@@ -59,29 +65,28 @@ class OperationController extends AbstractController
             if (count($errors) > 0) {
                 return new Response((string) $errors, 400);
             }
-            $operationRepository->save($operation, true);
+            $this->emRepository->save($operation, true);
 
             return $this->redirectToRoute('app_operation');
         }
 
         return $this->renderForm('operation/editOperation.html.twig', [
             'form' => $form,
-            'page_name' => 'Type Operation',
+            'page_name' => 'Operation',
         ]);
     }
 
     #[Route('/operation/delete/{id}', name: 'operation_delete')]
     public function deleteOperation(ManagerRegistry $doctrine, int $id): Response
     {
-        $operationRepository=$doctrine->getManager()->getRepository(Operation::class);
-        $operation=$operationRepository->find($id);
+        $operation=$this->emRepository->find($id);
         if (!$operation) {
             throw $this->createNotFoundException(
                 'No operation found for id ' . $id
             );
         }
         try {
-            $operationRepository->remove($operation, true);
+            $this->emRepository->remove($operation, true);
         } catch (\Exception $e) {
             echo "Exception Found - " . $e->getMessage() . "<br/>";
         }

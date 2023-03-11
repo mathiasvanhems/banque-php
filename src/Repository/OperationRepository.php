@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Operation;
+use App\Entity\TypeOperation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,20 +40,20 @@ class OperationRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Operation[] Returns an array of Operation objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('o.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   /**
+    * @return Operation[] Returns an array of Operation objects
+    */
+   public function findAllWithType(): array
+   {
+
+    return $this
+    ->createQueryBuilder('o')
+    ->select('o.id', 'o.montant', 'o.detail', 'o.dateOperation', 't.libelle', 't.sortie', 't.recurrence')
+    ->leftJoin('o.type', 't')
+    ->orderBy('o.dateOperation','DESC')
+    ->getQuery()
+    ->getResult();
+   }
 
 //    public function findOneBySomeField($value): ?Operation
 //    {

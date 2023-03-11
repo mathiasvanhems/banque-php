@@ -15,6 +15,15 @@ use Symfony\UX\Chartjs\Model\Chart;
 
 class BanqueController extends AbstractController
 {
+    private $doctrine;
+    private $em;
+    private $emRepository;
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine=$doctrine;
+        $this->em = $this->doctrine->getManager();
+        $this->emRepository=$this->em->getRepository(Banque::class);
+    }
     #[Route('/banque', name: 'app_banque')]
     public function index(ChartBuilderInterface $chartBuilder): Response
     {
@@ -56,8 +65,7 @@ class BanqueController extends AbstractController
         ValidatorInterface $validator
     ): Response
     {
-        $entityManager = $doctrine->getManager();
-        $banque = $entityManager->getRepository(Banque::class)->find($id);
+        $banque = $this->emRepository->find($id);
         if ($id == 0) {
             $banque = new Banque();
         }
@@ -80,8 +88,7 @@ class BanqueController extends AbstractController
                 return new Response((string) $errors, 400);
             }
 
-            $entityManager->persist($banque);
-            $entityManager->flush();
+            $this->emRepository->save($banque,true);
 
             return $this->redirectToRoute('app_banque');
         }
@@ -95,8 +102,7 @@ class BanqueController extends AbstractController
     #[Route('/banque/delete/{id}', name: 'banque_delete')]
     public function deleteBanque(ManagerRegistry $doctrine, int $id): Response
     {
-        $entityManager = $doctrine->getManager();
-        $banque = $entityManager->getRepository(Banque::class)->find($id);
+        $banque = $this->emRepository->find($id);
 
         if (!$banque) {
             throw $this->createNotFoundException(
@@ -104,8 +110,7 @@ class BanqueController extends AbstractController
             );
         }
 
-        $entityManager->remove($banque);
-        $entityManager->flush();
+        $this->emRepository->remove($banque);
 
         return $this->redirectToRoute('app_banque');
     }

@@ -16,21 +16,31 @@ use Symfony\UX\Chartjs\Model\Chart;
 
 class HistoriqueController extends AbstractController
 {
+
+    private $doctrine;
+    private $em;
+    private $emRepository;
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine=$doctrine;
+        $this->em = $this->doctrine->getManager();
+        $this->emRepository=$this->em->getRepository(Historique::class);
+    }
+
     #[Route('/historique/{annee<\d+>?0}', name: 'app_historique')]
     public function index(ChartBuilderInterface $chartBuilder, ManagerRegistry $doctrine, int $annee): Response
     {
         
         if (strlen((string)$annee)!=4){$annee=date('Y');}
-        //dd($annee);
-        $historiqueRepository=$doctrine->getManager()->getRepository(Historique::class);
-        $historiques[] = $historiqueRepository->findAllFromYear($annee);
+
+        $historiques = $this->emRepository->findAllFromYear($annee);
         $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
 
         $label = "Historique de l'année : ".$annee;
         $labels=[];
         $data= [];
 
-        foreach($historiques[0] as &$value)
+        foreach($historiques as &$value)
         {
             array_push($labels, $value->getPeriode()->format('d/m'));
             array_push($data, $value->getMontant());
@@ -61,6 +71,8 @@ class HistoriqueController extends AbstractController
         return $this->render('historique/index.html.twig', [
             'page_name' => 'Historique',
             'chart' => $chart,
+            'historiques'=>$historiques,
+            'annee'=>$annee,
         ]);
     }
 
@@ -74,8 +86,7 @@ class HistoriqueController extends AbstractController
     ): Response
     {
         setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
-        $entityManager = $doctrine->getManager();
-        $historique = $entityManager->getRepository(Historique::class)->find($id);
+        $historique = $this->emRepository->find($id);
         if ($id == 0) {
             $historique = new Historique();
             $historique->setPeriode(new \DateTime());
@@ -99,8 +110,7 @@ class HistoriqueController extends AbstractController
                 return new Response((string) $errors, 400);
             }
 
-            $entityManager->persist($historique);
-            $entityManager->flush();
+            $this->emRepository->save($historique,true);
 
             return $this->redirectToRoute('app_historique');
         }
@@ -114,8 +124,7 @@ class HistoriqueController extends AbstractController
     #[Route('/historique/delete/{id}', name: 'historique_delete')]
     public function deleteType(ManagerRegistry $doctrine, int $id): Response
     {
-        $entityManager = $doctrine->getManager();
-        $historique = $entityManager->getRepository(Historique::class)->find($id);
+        $historique = $this->emRepository->find($id);
 
         if (!$historique) {
             throw $this->createNotFoundException(
@@ -123,9 +132,7 @@ class HistoriqueController extends AbstractController
             );
         }
 
-        $entityManager->remove($historique);
-        $entityManager->flush();
-
+        $this->emRepository->remove($historique,true);
         return $this->redirectToRoute('app_historique');
     }
 

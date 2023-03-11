@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello OperationController!{% endblock %}
-
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
@@ -9,12 +7,35 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ page_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/banque/src/Controller/OperationController.php'|file_link(0) }}">src/Controller/OperationController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/banque/templates/operation/index.html.twig'|file_link(0) }}">templates/operation/index.html.twig</a></code></li>
-    </ul>
+    <h1>{{ page_name }}! ✅</h1>
+    <a href="{{ path('operation_edit') }}">Create</a>
+    <table class='t1'>
+        <thead>
+            <tr>
+                <th colspan="6">Liste des opérations</th>
+            </tr>
+            <tr>
+                <th colspan="1">montant</th>
+                <th colspan="1">date</th>
+                <th colspan="1">detail</th>
+                <th colspan="1">Action</th>
+                <th colspan="1">libelle</th>
+                <th colspan="1">Récurrence</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for operation in operations %}
+                <tr>
+                    <td>{{ operation.montant}}{% if operation.sortie == true %} 🟥 {% else %} 🟩 {% endif %}</td>
+                    <td>{{operation.dateOperation|date("m/d/Y")}}</td>
+                    <td>{{ operation.detail }}</td>
+                    <td>{{ operation.libelle }}</td>
+                    <td>{{ operation.recurrence }}</td>
+                    <td><a href="{{ path('operation_edit', {'id':operation.id}) }}">edit</a> / <a href="{{ path('operation_delete', {'id':operation.id}) }}">delete</a></td>
+                </tr>
+            {% endfor %}
+            
+        </tbody>
+    </table>
 </div>
 {% endblock %}
