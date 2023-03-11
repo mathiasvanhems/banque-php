@@ -4,6 +4,9 @@ npm install
 npm run dev 
 npm run watch
 
+test : 
+php bin/phpunit
+
 fix sequence
 DO $$
 DECLARE 
