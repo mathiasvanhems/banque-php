@@ -50,7 +50,9 @@ class OperationRepository extends ServiceEntityRepository
     ->createQueryBuilder('o')
     ->select('o.id', 'o.montant', 'o.detail', 'o.dateOperation', 't.libelle', 't.sortie', 't.recurrence')
     ->leftJoin('o.type', 't')
-    ->orderBy('o.dateOperation','DESC')
+    ->addOrderBy('o.dateOperation','DESC')
+    ->addOrderBy('t.sortie','ASC')
+    ->addOrderBy('o.montant','DESC')
     ->getQuery()
     ->getResult();
    }

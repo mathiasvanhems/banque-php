@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello BanqueController!{% endblock %}
-
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
@@ -9,22 +7,52 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ page_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/banque/src/Controller/BanqueController.php'|file_link(0) }}">src/Controller/BanqueController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/banque/templates/banque/index.html.twig'|file_link(0) }}">templates/banque/index.html.twig</a></code></li>
+    <h1>{{ page_name }}</h1>
         <div {{ stimulus_controller('say-hello') }}>
-        <input type="text" {{ stimulus_target('say-hello', 'name') }}>
+            <input type="text" {{ stimulus_target('say-hello', 'name') }}>
 
-            <button {{ stimulus_action('say-hello', 'greet') }}>
-                Greet
-            </button>
+                <button {{ stimulus_action('say-hello', 'greet') }}>
+                    Greet
+                </button>
 
-        <div {{ stimulus_target('say-hello', 'output') }}></div></div>
+            <div {{ stimulus_target('say-hello', 'output') }}></div>
+        </div>
 
     </ul>
+<a href="{{ path('banque_edit') }}">Create</a>
+    <table class='t1'>
+        <thead>
+            <tr>
+                <th colspan="5">Liste des données</th>
+            </tr>
+            <tr>
+                <th colspan="1">CCP</th>
+                <th colspan="1">Livret A</th>
+                <th colspan="1">Epargne</th>
+                <th colspan="1">Tickets Restaurant</th>
+                <th colspan="1">actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for banque in banques %}
+                <tr>
+                    <td>{{banque.compteCourant}}</td>
+                    <td>{{banque.livretA}}</td>
+                    <td>{{banque.Epargne}}</td>
+                    <td>{{banque.ticketRestaurant}}</td>
+                    <td><a href="{{ path('banque_edit', {'id':banque.id}) }}">edit</a> / <a href="{{ path('banque_delete', {'id':banque.id}) }}">delete</a></td>
+                </tr>
+            {% endfor %}
+            <tr>
+                    <td>Total</td>
+                    <td>{{total}}</td>
+                    <td>Rent Livret A taux de {{taux}}%</td>
+                    <td>{{livretA}}</td>
+                    <td></td>
+                </tr>
+        </tbody>
+    </table>
+
      {{ render_chart(chart) }}
 
     {# You can pass HTML attributes as a second argument to add them on the <canvas> tag #}

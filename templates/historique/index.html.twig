@@ -7,7 +7,7 @@
 </style>
 
 <div class="example-wrapper">
-    <h1> {{ page_name }} ✅</h1>
+    <h1> {{ page_name }}</h1>
     <a href="{{ path('app_historique', {'annee':annee-1}) }}">⬅️ {{annee-1}}</a>  - {{annee}} - <a href="{{ path('app_historique', {'annee':annee+1}) }}">{{annee+1}} ➡️</a>
     {{ render_chart(chart) }}
     <br />

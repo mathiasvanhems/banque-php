@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Banque;
+use App\Entity\Historique;
 use App\Form\BanqueType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,26 +19,51 @@ class BanqueController extends AbstractController
     private $doctrine;
     private $em;
     private $emRepository;
+    private $emRepositoryHistorique;
     public function __construct(ManagerRegistry $doctrine)
     {
         $this->doctrine=$doctrine;
         $this->em = $this->doctrine->getManager();
         $this->emRepository=$this->em->getRepository(Banque::class);
+        $this->emRepositoryHistorique=$this->em->getRepository(Historique::class);
+
     }
     #[Route('/banque', name: 'app_banque')]
     public function index(ChartBuilderInterface $chartBuilder): Response
     {
+        $annee=date('Y');
+        $taux=2;
 
+        /* recup data */
+        $banques = $this->emRepository->findAll();
+        $historiques = $this->emRepositoryHistorique->findAllFromYear($annee);
+        
+
+        /* Calcul */
+        $total=floatval($banques[0]->getCompteCourant())+floatval($banques[0]->getLivretA())+floatval($banques[0]->getEpargne())+floatval($banques[0]->getTicketRestaurant());
+        $livretABonus=floatval($banques[0]->getLivretA())*($taux)/100;
+
+        /* Charts */
         $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
 
+        $label = "Historique de l'année : ".$annee;
+        $labels=[];
+        $data= [];
+
+        foreach($historiques as &$value)
+        {
+            array_push($labels, $value->getPeriode()->format('d/m'));
+            array_push($data, $value->getMontant());
+        }
+
         $chart->setData([
-            'labels' => ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            'labels' => $labels,
             'datasets' => [
                 [
-                    'label' => 'My First dataset',
+                    'label' => $label,
                     'backgroundColor' => 'rgb(255, 99, 132)',
                     'borderColor' => 'rgb(255, 99, 132)',
-                    'data' => [0, 10, 5, 2, 20, 30, 45],
+                    'data' => $data,
                 ],
             ],
         ]);
@@ -51,9 +77,15 @@ class BanqueController extends AbstractController
             ],
         ]);
 
+
+
         return $this->render('banque/index.html.twig', [
-            'page_name' => 'BanqueController',
+            'page_name' => 'Banque',
             'chart' => $chart,
+            'banques'=>$banques,
+            'total' => $total,
+            'livretA'=>$livretABonus,
+            'taux'=>$taux,
         ]);
     }
 
@@ -95,7 +127,7 @@ class BanqueController extends AbstractController
 
         return $this->renderForm('banque/editBanque.html.twig', [
             'form' => $form,
-            'page_name' => 'Type Operation',
+            'page_name' => 'Banque',
         ]);
     }
 
@@ -110,7 +142,7 @@ class BanqueController extends AbstractController
             );
         }
 
-        $this->emRepository->remove($banque);
+        $this->emRepository->remove($banque,true);
 
         return $this->redirectToRoute('app_banque');
     }

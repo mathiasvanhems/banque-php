@@ -46,6 +46,7 @@ class OperationController extends AbstractController
         $operation=$this->emRepository->find($id);
         if ($id == 0) {
             $operation = new Operation();
+            $operation->setDateOperation(new \DateTime());
         }
 
         if (!$operation) {
