@@ -43,7 +43,7 @@ class BanqueController extends AbstractController
         ]);
 
         return $this->render('banque/index.html.twig', [
-            'controller_name' => 'BanqueController',
+            'page_name' => 'BanqueController',
             'chart' => $chart,
         ]);
     }
@@ -88,6 +88,7 @@ class BanqueController extends AbstractController
 
         return $this->renderForm('banque/editBanque.html.twig', [
             'form' => $form,
+            'page_name' => 'Type Operation',
         ]);
     }
 

@@ -14,11 +14,25 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class TypeOperationController extends AbstractController
 {
+    private $doctrine;
+    private $em;
+    private $emRepository;
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine=$doctrine;
+        $this->em = $this->doctrine->getManager();
+        $this->emRepository=$this->em->getRepository(TypeOperation::class);
+    }
+
     #[Route('/type', name: 'app_type_operation')]
     public function index(): Response
     {
+
+        $types= $this->emRepository->findAllOrder();
+
         return $this->render('type_operation/index.html.twig', [
-            'controller_name' => 'TypeOperationController',
+            'page_name' => 'Type Operation',
+            'types'=>$types,
         ]);
     }
 
@@ -30,10 +44,10 @@ class TypeOperationController extends AbstractController
         ValidatorInterface $validator
     ): Response
     {
-        $entityManager = $doctrine->getManager();
-        $typeOperation = $entityManager->getRepository(TypeOperation::class)->find($id);
+        $typeOperation = $this->emRepository->find($id);
         if ($id == 0) {
             $typeOperation = new TypeOperation();
+            $typeOperation->setSortie(true);
         }
 
         if (!$typeOperation) {
@@ -54,22 +68,22 @@ class TypeOperationController extends AbstractController
                 return new Response((string) $errors, 400);
             }
 
-            $entityManager->persist($typeOperation);
-            $entityManager->flush();
+            $this->emRepository->save($typeOperation,true);
 
             return $this->redirectToRoute('app_type_operation');
         }
 
         return $this->renderForm('type_operation/editTypeOperation.html.twig', [
             'form' => $form,
+            'page_name' => 'Type Operation',
         ]);
     }
 
     #[Route('/type/delete/{id}', name: 'type_delete')]
     public function deleteType(ManagerRegistry $doctrine, int $id): Response
     {
-        $entityManager = $doctrine->getManager();
-        $typeOperation = $entityManager->getRepository(TypeOperation::class)->find($id);
+
+        $typeOperation = $this->emRepository->find($id);
 
         if (!$typeOperation) {
             throw $this->createNotFoundException(
@@ -77,8 +91,7 @@ class TypeOperationController extends AbstractController
             );
         }
 
-        $entityManager->remove($typeOperation);
-        $entityManager->flush();
+        $this->emRepository->remove($typeOperation,true);
 
         return $this->redirectToRoute('app_type_operation');
     }

@@ -22,6 +22,7 @@ class TypeOperationType extends AbstractType
                     'Mensuel' => 'Mensuel',
                 ],
             ])
+            ->add('sortie')
             ->add('save', SubmitType::class)
         ;
     }

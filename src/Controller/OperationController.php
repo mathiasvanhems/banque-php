@@ -6,7 +6,6 @@ use App\Entity\Operation;
 use App\Form\OperationType;
 use App\Entity\TypeOperation;
 use Doctrine\Persistence\ManagerRegistry;
-use PhpParser\Node\Stmt\TraitUse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,11 +14,17 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class OperationController extends AbstractController
 {
+    private $doctrine;
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine=$doctrine;
+    }
+
     #[Route('/operation', name: 'app_operation')]
     public function index(): Response
     {
         return $this->render('operation/index.html.twig', [
-            'controller_name' => 'OperationController',
+            'page_name' => 'OperationController',
         ]);
     }
 
@@ -61,6 +66,7 @@ class OperationController extends AbstractController
 
         return $this->renderForm('operation/editOperation.html.twig', [
             'form' => $form,
+            'page_name' => 'Type Operation',
         ]);
     }
 

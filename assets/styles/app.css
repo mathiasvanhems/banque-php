@@ -1,4 +1,20 @@
 @import '~js-datepicker/dist/datepicker.min.css';
+@import 'bootstrap/dist/css/bootstrap.min.css';
 body {
     background-color: lightgray;
+}
+
+.t1 {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    background-color: aliceblue;
+}
+.t1 th, td{
+    border: 1px solid black;
+    padding: 10px;
+  }
+.t1 td{
+    text-align: right;
 }

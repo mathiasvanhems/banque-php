@@ -74,3 +74,14 @@ Encore
 ;
 
 module.exports = Encore.getWebpackConfig();
+module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      }
+    ]
+  }

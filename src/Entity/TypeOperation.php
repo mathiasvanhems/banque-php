@@ -27,6 +27,9 @@ class TypeOperation
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Operation::class)]
     private Collection $operations;
 
+    #[ORM\Column]
+    private ?bool $sortie = null;
+
     public function __construct()
     {
         $this->operations = new ArrayCollection();
@@ -87,6 +90,18 @@ class TypeOperation
                 $operation->setType(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isSortie(): ?bool
+    {
+        return $this->sortie;
+    }
+
+    public function setSortie(bool $sortie): self
+    {
+        $this->sortie = $sortie;
 
         return $this;
     }

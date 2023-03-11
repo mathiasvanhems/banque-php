@@ -39,20 +39,19 @@ class TypeOperationRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return TypeOperation[] Returns an array of TypeOperation objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   /**
+    * @return TypeOperation[] Returns an array of TypeOperation objects
+    */
+   public function findAllOrder(): array
+   {
+       return $this->createQueryBuilder('t')
+           ->AddOrderBy('t.sortie', 'ASC')
+           ->AddOrderBy('t.recurrence', 'ASC')
+           ->AddOrderBy('t.libelle', 'ASC')
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 
 //    public function findOneBySomeField($value): ?TypeOperation
 //    {

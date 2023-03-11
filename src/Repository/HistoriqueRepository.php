@@ -39,20 +39,22 @@ class HistoriqueRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Historique[] Returns an array of Historique objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('h')
-//            ->andWhere('h.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('h.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Historique[] Returns an array of Historique objects
+     */
+    public function findAllFromYear($value): array
+    {
+        $periodeStart= $value.'-01-01';
+        $periodeEnd=$value.'-12-31';
+        return $this->createQueryBuilder('h')
+            ->andWhere('h.periode >= :start and h.periode <= :end ')
+            ->setParameter('start', $periodeStart)
+            ->setParameter('end', $periodeEnd)
+            ->orderBy('h.periode', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+}
 
 //    public function findOneBySomeField($value): ?Historique
 //    {

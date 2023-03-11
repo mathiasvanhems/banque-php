@@ -9,15 +9,58 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 class HistoriqueController extends AbstractController
 {
-    #[Route('/historique', name: 'app_historique')]
-    public function index(): Response
+    #[Route('/historique/{annee<\d+>?0}', name: 'app_historique')]
+    public function index(ChartBuilderInterface $chartBuilder, ManagerRegistry $doctrine, int $annee): Response
     {
+        
+        if (strlen((string)$annee)!=4){$annee=date('Y');}
+        //dd($annee);
+        $historiqueRepository=$doctrine->getManager()->getRepository(Historique::class);
+        $historiques[] = $historiqueRepository->findAllFromYear($annee);
+        $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
+
+        $label = "Historique de l'année : ".$annee;
+        $labels=[];
+        $data= [];
+
+        foreach($historiques[0] as &$value)
+        {
+            array_push($labels, $value->getPeriode()->format('d/m'));
+            array_push($data, $value->getMontant());
+        }
+
+        $chart->setData([
+            'labels' => $labels,
+            'datasets' => [
+                [
+                    'label' => $label,
+                    'backgroundColor' => 'rgb(255, 99, 132)',
+                    'borderColor' => 'rgb(255, 99, 132)',
+                    'data' => $data,
+                ],
+            ],
+        ]);
+
+        $chart->setOptions([
+            'scales' => [
+                'y' => [
+                    'suggestedMin' => 0,
+                    'suggestedMax' => 100,
+                ],
+            ],
+        ]);
+
+
         return $this->render('historique/index.html.twig', [
-            'controller_name' => 'HistoriqueController',
+            'page_name' => 'Historique',
+            'chart' => $chart,
         ]);
     }
 
@@ -34,10 +77,8 @@ class HistoriqueController extends AbstractController
         $entityManager = $doctrine->getManager();
         $historique = $entityManager->getRepository(Historique::class)->find($id);
         if ($id == 0) {
-            //dd(strftime(" in French %A le %d %B, %Y"));
             $historique = new Historique();
-            $historique->setMois(ucfirst(strftime("%B")));
-            $historique->setAnnee(date("Y"));
+            $historique->setPeriode(new \DateTime());
         }
 
         if (!$historique) {
@@ -66,6 +107,7 @@ class HistoriqueController extends AbstractController
 
         return $this->renderForm('historique/editHistorique.html.twig', [
             'form' => $form,
+            'page_name' => 'Historique',
         ]);
     }
 

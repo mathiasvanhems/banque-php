@@ -18,13 +18,8 @@ class Historique
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $montant = null;
 
-    #[ORM\Column(length: 30, nullable: true)]
-    private ?string $mois = null;
-
-    #[ORM\Column(nullable: true)]
-    #[Assert\GreaterThan(2008)]
-    #[Assert\Length(4)]
-    private ?int $annee = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $periode = null;
 
     public function getId(): ?int
     {
@@ -43,26 +38,14 @@ class Historique
         return $this;
     }
 
-    public function getMois(): ?string
+    public function getPeriode(): ?\DateTimeInterface
     {
-        return $this->mois;
+        return $this->periode;
     }
 
-    public function setMois(?string $mois): self
+    public function setPeriode(\DateTimeInterface $periode): self
     {
-        $this->mois = $mois;
-
-        return $this;
-    }
-
-    public function getAnnee(): ?int
-    {
-        return $this->annee;
-    }
-
-    public function setAnnee(?int $annee): self
-    {
-        $this->annee = $annee;
+        $this->periode = $periode;
 
         return $this;
     }
