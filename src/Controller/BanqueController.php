@@ -131,7 +131,7 @@ class BanqueController extends AbstractController
         ]);
     }
 
-    #[Route('/banque/delete/{id}', name: 'banque_delete')]
+    #[Route('/banque/delete/{id}', name: 'banque_delete', methods: ["DELETE"])]
     public function deleteBanque(ManagerRegistry $doctrine, int $id): Response
     {
         $banque = $this->emRepository->find($id);

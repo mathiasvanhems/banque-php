@@ -4,7 +4,7 @@
 
 
 <div class="example-wrapper">
-    <h1>{{ page_name }}</h1>
+    <h1>{{ page_name }}</h1><br />
     
     <table class='t1'>
         <thead>
@@ -17,7 +17,7 @@
                 <th colspan="1">detail</th>
                 <th colspan="1">libelle</th>
                 <th colspan="1">Récurrence</th>
-                <th colspan="2">Actions <a href="{{ path('operation_edit') }}" class="btn btn-secondary" style="display: inline-block">Create</a></th>
+                <th colspan="2">Actions <a href="{{ path('operation_edit') }}" class="btn btn-primary btn-sm" style="display: inline-block">Create</a></th>
 
             </tr>
         </thead>
@@ -29,11 +29,11 @@
                     <td>{{ operation.detail }}</td>
                     <td>{{ operation.libelle }}</td>
                     <td>{{ operation.recurrence }}</td>
-                    <td><a href="{{ path('operation_edit', {'id':operation.id}) }}" class="btn btn-secondary" style="display: inline-block">edit</a></td>
+                    <td><a href="{{ path('operation_edit', {'id':operation.id}) }}" class="btn btn-secondary" style="display: inline-block btn-sm">edit</a></td>
                     <td>
                         <form method="post" action="{{ path('operation_delete', {'id':operation.id}) }}" style="display: inline-block">
                             <input type="hidden" name="_method" value="delete">
-                            <button class="btn btn-danger">Delete</button> 
+                            <button class="btn btn-danger btn-sm">Delete</button> 
                         </form>
                     </td>
                 </tr>

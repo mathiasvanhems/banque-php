@@ -121,7 +121,7 @@ class HistoriqueController extends AbstractController
         ]);
     }
 
-    #[Route('/historique/delete/{id}', name: 'historique_delete')]
+    #[Route('/historique/delete/{id}', name: 'historique_delete', methods: ["DELETE"])]
     public function deleteType(ManagerRegistry $doctrine, int $id): Response
     {
         $historique = $this->emRepository->find($id);
