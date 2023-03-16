@@ -21,22 +21,24 @@ class TypeOperationRepository extends ServiceEntityRepository
         parent::__construct($registry, TypeOperation::class);
     }
 
-    public function save(TypeOperation $entity, bool $flush = false): void
+    public function save(TypeOperation $entity, bool $flush = false)
     {
         $this->getEntityManager()->persist($entity);
 
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+        return $entity;
     }
 
-    public function remove(TypeOperation $entity, bool $flush = false): void
+    public function remove(TypeOperation $entity, bool $flush = false):bool
     {
         $this->getEntityManager()->remove($entity);
 
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+        return true;
     }
 
    /**

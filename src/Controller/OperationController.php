@@ -6,6 +6,7 @@ use App\Entity\Operation;
 use App\Form\OperationType;
 use App\Entity\TypeOperation;
 use Doctrine\Persistence\ManagerRegistry;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -77,7 +78,7 @@ class OperationController extends AbstractController
         ]);
     }
 
-    #[Route('/operation/delete/{id}', name: 'operation_delete')]
+    #[Route('/operation/delete/{id}', name: 'operation_delete', methods: ["DELETE"])]
     public function deleteOperation(ManagerRegistry $doctrine, int $id): Response
     {
         $operation=$this->emRepository->find($id);

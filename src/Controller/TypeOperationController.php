@@ -79,7 +79,7 @@ class TypeOperationController extends AbstractController
         ]);
     }
 
-    #[Route('/type/delete/{id}', name: 'type_delete')]
+    #[Route('/type/delete/{id}', name: 'type_delete', methods: ["DELETE"])]
     public function deleteType(ManagerRegistry $doctrine, int $id): Response
     {
 

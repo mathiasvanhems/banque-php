@@ -21,22 +21,22 @@ class BanqueRepository extends ServiceEntityRepository
         parent::__construct($registry, Banque::class);
     }
 
-    public function save(Banque $entity, bool $flush = false): void
+    public function save(Banque $entity, bool $flush = false)
     {
         $this->getEntityManager()->persist($entity);
-
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+        return $entity;
     }
 
-    public function remove(Banque $entity, bool $flush = false): void
+    public function remove(Banque $entity, bool $flush = false): bool
     {
         $this->getEntityManager()->remove($entity);
-
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+        return true;
     }
 
 //    /**

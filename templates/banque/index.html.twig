@@ -1,53 +1,45 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+
 
 <div class="example-wrapper">
     <h1>{{ page_name }}</h1>
-        <div {{ stimulus_controller('say-hello') }}>
-            <input type="text" {{ stimulus_target('say-hello', 'name') }}>
-
-                <button {{ stimulus_action('say-hello', 'greet') }}>
-                    Greet
-                </button>
-
-            <div {{ stimulus_target('say-hello', 'output') }}></div>
-        </div>
-
-    </ul>
-<a href="{{ path('banque_edit') }}">Create</a>
+    <br />
     <table class='t1'>
         <thead>
             <tr>
-                <th colspan="5">Liste des données</th>
+                <th colspan="6">Liste des données</th>
             </tr>
             <tr>
                 <th colspan="1">CCP</th>
                 <th colspan="1">Livret A</th>
                 <th colspan="1">Epargne</th>
                 <th colspan="1">Tickets Restaurant</th>
-                <th colspan="1">actions</th>
+                <th colspan="2">actions <a href="{{ path('banque_edit') }}"class="btn btn-primary btn-sm" style="display: inline-block">Create</a></th>
             </tr>
         </thead>
         <tbody>
             {% for banque in banques %}
                 <tr>
-                    <td>{{banque.compteCourant}}</td>
-                    <td>{{banque.livretA}}</td>
-                    <td>{{banque.Epargne}}</td>
-                    <td>{{banque.ticketRestaurant}}</td>
-                    <td><a href="{{ path('banque_edit', {'id':banque.id}) }}">edit</a> / <a href="{{ path('banque_delete', {'id':banque.id}) }}">delete</a></td>
+                    <td>{{banque.compteCourant}}{{ 'EUR'|currency_symbol }}</td>
+                    <td>{{banque.livretA}}{{ 'EUR'|currency_symbol }}</td>
+                    <td>{{banque.Epargne}}{{ 'EUR'|currency_symbol }}</td>
+                    <td>{{banque.ticketRestaurant}}{{ 'EUR'|currency_symbol }}</td>
+                    <td><a href="{{ path('banque_edit', {'id':banque.id}) }}" class="btn btn-secondary btn-sm" style="display: inline-block">edit</a></td>
+                    <td>
+                        <form method="post" action="{{ path('banque_delete', {'id':banque.id}) }}" style="display: inline-block">
+                            <input type="hidden" name="_method" value="delete">
+                            <button class="btn btn-danger btn-sm">Delete</button> 
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
             <tr>
                     <td>Total</td>
-                    <td>{{total}}</td>
+                    <td>{{total}}{{ 'EUR'|currency_symbol }}</td>
                     <td>Rent Livret A taux de {{taux}}%</td>
-                    <td>{{livretA}}</td>
+                    <td>{{livretA}}{{ 'EUR'|currency_symbol }}</td>
                     <td></td>
                 </tr>
         </tbody>
