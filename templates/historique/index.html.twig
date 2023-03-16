@@ -26,8 +26,8 @@
         <tbody>
             {% for historique in historiques %}
                 <tr>
-                    <td>{{historique.montant}}</td>
-                    <td>{{historique.periode|date("m/d/Y")}}</td>
+                    <td>{{historique.montant}}{{ 'EUR'|currency_symbol }}</td>
+                    <td>{{historique.periode|date("d/m/Y")}}</td>
                     <td><a href="{{ path('historique_edit', {'id':historique.id}) }}">edit</a> / <a href="{{ path('historique_delete', {'id':historique.id}) }}">delete</a></td>
                 </tr>
             {% endfor %}

@@ -36,18 +36,18 @@
         <tbody>
             {% for banque in banques %}
                 <tr>
-                    <td>{{banque.compteCourant}}</td>
-                    <td>{{banque.livretA}}</td>
-                    <td>{{banque.Epargne}}</td>
-                    <td>{{banque.ticketRestaurant}}</td>
+                    <td>{{banque.compteCourant}}{{ 'EUR'|currency_symbol }}</td>
+                    <td>{{banque.livretA}}{{ 'EUR'|currency_symbol }}</td>
+                    <td>{{banque.Epargne}}{{ 'EUR'|currency_symbol }}</td>
+                    <td>{{banque.ticketRestaurant}}{{ 'EUR'|currency_symbol }}</td>
                     <td><a href="{{ path('banque_edit', {'id':banque.id}) }}">edit</a> / <a href="{{ path('banque_delete', {'id':banque.id}) }}">delete</a></td>
                 </tr>
             {% endfor %}
             <tr>
                     <td>Total</td>
-                    <td>{{total}}</td>
+                    <td>{{total}}{{ 'EUR'|currency_symbol }}</td>
                     <td>Rent Livret A taux de {{taux}}%</td>
-                    <td>{{livretA}}</td>
+                    <td>{{livretA}}{{ 'EUR'|currency_symbol }}</td>
                     <td></td>
                 </tr>
         </tbody>
